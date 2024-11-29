@@ -4,11 +4,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Kelompok 4
- * @version 1.0
- * @since 2023-12-01
- */
 public class Keranjang {
     ArrayList<Barang> barang;
     ListBarang listBarang;
