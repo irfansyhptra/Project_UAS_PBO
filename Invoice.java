@@ -5,11 +5,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * @author Kelompok 4
- * @version 1.0
- * @since 2023-12-01
- */
 public class Invoice {
 
     /**
