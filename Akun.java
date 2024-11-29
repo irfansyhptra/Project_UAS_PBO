@@ -1,79 +1,73 @@
 import java.util.List;
 
-/**
- * @author Kelompok4
- * @version 1.0
- * @since 2023-12-01
- */
 abstract public class Akun {
 
-    // ANSI escape codes for coloring
+    // Kode ANSI untuk pewarnaan teks
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_GREEN = "\u001B[32m";
-    private static final String ANSI_RED = "\u001B[31m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_HIJAU = "\u001B[32m";
+    private static final String ANSI_MERAH = "\u001B[31m";
+    private static final String ANSI_KUNING = "\u001B[33m";
 
     /**
-     * Saves the user account information to a text file.
+     * Menyimpan informasi akun pengguna ke dalam file teks.
      *
-     * @param username The username of the user.
-     * @param password The password of the user.
+     * @param username Nama pengguna.
+     * @param password Kata sandi pengguna.
      */
-    public abstract void saveToTextFile(String username, String password);
+    public abstract void simpanKeFileTeks(String username, String password);
 
     /**
-     * Reads and returns a list of customer accounts from a data source.
+     * Membaca dan mengembalikan daftar akun pelanggan dari sumber data.
      *
-     * @return A list containing customer account information.
+     * @return Daftar informasi akun pelanggan.
      */
-    public abstract List<String> readCustomerAccounts();
+    public abstract List<String> bacaAkunPelanggan();
 
     /**
-     * Validates the sign-in credentials for a user.
+     * Memvalidasi kredensial masuk pengguna.
      *
-     * @param username The username entered for sign-in.
-     * @param password The password entered for sign-in.
-     * @return True if the provided credentials are valid, false otherwise.
+     * @param username Nama pengguna yang dimasukkan.
+     * @param password Kata sandi yang dimasukkan.
+     * @return True jika kredensial valid, false jika tidak.
      */
-    public abstract boolean validateSignIn(String username, String password);
+    public abstract boolean validasiMasuk(String username, String password);
 
     /**
-     * Validates the sign-up credentials for a new user.
+     * Memvalidasi kredensial pendaftaran pengguna baru.
      *
-     * @param username The username entered for sign-up.
-     * @param password The password entered for sign-up.
-     * @return An integer code indicating the result of the validation:
-     *         - 0: Sign-up successful.
-     *         - 1: Username already exists.
-     *         - 2: Other validation failure.
+     * @param username Nama pengguna yang didaftarkan.
+     * @param password Kata sandi yang didaftarkan.
+     * @return Kode hasil validasi:
+     *         - 0: Pendaftaran berhasil.
+     *         - 1: Nama pengguna sudah ada.
+     *         - 2: Kegagalan validasi lainnya.
      */
-    public abstract int validateSignUp(String username, String password);
+    public abstract int validasiDaftar(String username, String password);
 
     /**
-     * Prints a success message for successful operations.
+     * Menampilkan pesan keberhasilan untuk operasi yang sukses.
      *
-     * @param message The success message to display.
+     * @param pesan Pesan keberhasilan yang akan ditampilkan.
      */
-    protected void printSuccessMessage(String message) {
-        System.out.println(ANSI_GREEN + "Success: " + message + ANSI_RESET);
+    protected void tampilkanPesanBerhasil(String pesan) {
+        System.out.println(ANSI_HIJAU + "Berhasil: " + pesan + ANSI_RESET);
     }
 
     /**
-     * Prints an error message for failed operations.
+     * Menampilkan pesan kesalahan untuk operasi yang gagal.
      *
-     * @param message The error message to display.
+     * @param pesan Pesan kesalahan yang akan ditampilkan.
      */
-    protected void printErrorMessage(String message) {
-        System.out.println(ANSI_RED + "Error: " + message + ANSI_RESET);
+    protected void tampilkanPesanKesalahan(String pesan) {
+        System.out.println(ANSI_MERAH + "Kesalahan: " + pesan + ANSI_RESET);
     }
 
     /**
-     * Prints an informational message.
+     * Menampilkan pesan informasi.
      *
-     * @param message The informational message to display.
+     * @param pesan Pesan informasi yang akan ditampilkan.
      */
-    protected void printInfoMessage(String message) {
-        System.out.println(ANSI_YELLOW + "Info: " + message + ANSI_RESET);
+    protected void tampilkanPesanInformasi(String pesan) {
+        System.out.println(ANSI_KUNING + "Info: " + pesan + ANSI_RESET);
     }
 }
