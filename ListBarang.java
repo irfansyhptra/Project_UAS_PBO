@@ -2,11 +2,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * @author Kelompok 4
- * @version 1.0
- * @since 2023-12-01
- */
 public class ListBarang {
     ArrayList<Barang> barang;
 
