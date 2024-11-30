@@ -3,54 +3,46 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ListBarang {
+    // Menyimpan daftar barang dalam bentuk ArrayList
     ArrayList<Barang> barang;
 
     /**
-     * Constructs an empty list of items.
+     * Konstruktor untuk membuat daftar barang kosong.
      */
     public ListBarang() {
         this.barang = new ArrayList<>();
     }
 
     /**
-     * Adds a new item to the list and saves the changes to the file.
+     * Menambahkan barang baru ke dalam daftar dan menyimpan perubahan ke file.
      *
-     * @param newBarang The item to be added.
+     * @param newBarang Barang yang akan ditambahkan.
      */
     public void tambahBarang(Barang newBarang) {
-        barang.add(newBarang);  
+        barang.add(newBarang);
         simpanKeFile();
     }
 
     /**
-     * Removes an item from the list and updates the file.
+     * Menghapus barang dari daftar berdasarkan kode barang dan memperbarui file.
      *
-     * @param kodeBarang The code of the item to be removed.
-     * @return True if the item is successfully removed; false otherwise.
+     * @param kodeBarang Kode barang yang akan dihapus.
+     * @return True jika barang berhasil dihapus, false jika tidak ditemukan.
      */
     public boolean hapusBarang(String kodeBarang) {
         Barang barangToDelete = null;
+        // Mencari barang berdasarkan kode
         for (Barang b : barang) {
             if (b.getKodeBarang().equals(kodeBarang)) {
                 barangToDelete = b;
                 break;
             }
         }
-        
+
+        // Jika barang ditemukan, hapus dari daftar dan perbarui file
         if (barangToDelete != null) {
             barang.remove(barangToDelete);
-            String fileName = "Admin/Barang/ListBarang.txt";
-            try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-                for (Barang b : barang) {
-                    writer.println("Kode Barang: " + b.getKodeBarang());
-                    writer.println("Nama Barang: " + b.getNamaBarang());
-                    writer.println("Harga: " + b.getHarga());
-                    writer.println("Stok: " + b.getStok());
-                    writer.println();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            simpanKeFile();
             return true;
         } else {
             return false;
@@ -58,51 +50,42 @@ public class ListBarang {
     }
 
     /**
-     * Edits the details of an item in the list and updates the file.
+     * Mengedit informasi barang dalam daftar dan memperbarui file.
      *
-     * @param kodeBarang The code of the item to be edited.
-     * @param namaBaru   The new name of the item.
-     * @param hargaBaru  The new price of the item.
-     * @param stokBaru   The new stock of the item.
-     * @return True if the item is successfully edited; false otherwise.
+     * @param kodeBarang Kode barang yang akan diedit.
+     * @param namaBaru   Nama baru barang.
+     * @param hargaBaru  Harga baru barang.
+     * @param stokBaru   Stok baru barang.
+     * @return True jika barang berhasil diedit, false jika barang tidak ditemukan.
      */
     public boolean editBarang(String kodeBarang, String namaBaru, int hargaBaru, int stokBaru) {
         for (Barang b : barang) {
             if (b.getKodeBarang().equals(kodeBarang)) {
+                // Mengubah informasi barang
                 b.setNamaBarang(namaBaru);
                 b.setHarga(hargaBaru);
                 b.setStok(stokBaru);
-                String fileName = "Admin/Barang/ListBarang.txt";
-                try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-                    for (Barang bar : barang) {
-                        writer.println("Kode Barang: " + bar.getKodeBarang());
-                        writer.println("Nama Barang: " + bar.getNamaBarang());
-                        writer.println("Harga: " + bar.getHarga());
-                        writer.println("Stok: " + bar.getStok());
-                        writer.println();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                simpanKeFile();
                 return true;
             }
         }
-
-        System.out.println("\nItem's code " + kodeBarang + " is not found.\n");
+        // Jika barang tidak ditemukan
+        System.out.println("\nKode barang " + kodeBarang + " tidak ditemukan.\n");
         return false;
     }
 
     /**
-     * Saves the list of items to a file.
+     * Menyimpan daftar barang ke file.
      */
     private void simpanKeFile() {
         String fileName = "Admin/Barang/ListBarang.txt";
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
-            for(int i = 0; i < barang.size(); i++){
-                writer.println("Kode Barang: " + barang.get(i).getKodeBarang());
-                writer.println("Nama Barang: " + barang.get(i).getNamaBarang());
-                writer.println("Harga: " + barang.get(i).getHarga());
-                writer.println("Stok: " + barang.get(i).getStok());
+            // Menulis setiap barang ke dalam file
+            for (Barang b : barang) {
+                writer.println("Kode Barang: " + b.getKodeBarang());
+                writer.println("Nama Barang: " + b.getNamaBarang());
+                writer.println("Harga: " + b.getHarga());
+                writer.println("Stok: " + b.getStok());
                 writer.println();
             }
         } catch (IOException e) {
@@ -111,20 +94,22 @@ public class ListBarang {
     }
 
     /**
-     * Reads item data from a file and populates the list.
+     * Membaca data barang dari file dan mengisi daftar barang.
      *
-     * @param fileName The file path to read item data from.
+     * @param fileName Nama file yang akan dibaca.
      */
     public void bacaDariFile(String fileName) {
         try (Scanner scanner = new Scanner(new File(fileName))) {
+            // Membaca data barang baris per baris
             while (scanner.hasNextLine()) {
                 String kodeBarang = scanner.nextLine().split(": ")[1];
                 String namaBarang = scanner.nextLine().split(": ")[1];
                 int harga = Integer.parseInt(scanner.nextLine().split(": ")[1]);
                 int stok = Integer.parseInt(scanner.nextLine().split(": ")[1]);
-
                 barang.add(new Barang(namaBarang, kodeBarang, harga, stok));
-                scanner.nextLine();
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine(); // Membaca baris kosong
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -132,22 +117,23 @@ public class ListBarang {
     }
 
     /**
-     * Checks if an item with the specified code exists in the list.
+     * Mengecek apakah barang dengan kode tertentu ada dalam daftar.
      *
-     * @param kodeBarang The code of the item to be checked.
-     * @return True if the item exists; false otherwise.
+     * @param kodeBarang Kode barang yang akan dicek.
+     * @return True jika barang ditemukan, false jika tidak.
      */
     public boolean idValidator(String kodeBarang) {
         for (Barang b : barang) {
             if (b.getKodeBarang().equals(kodeBarang)) {
-                System.out.println("\nItem's name: " + b.getNamaBarang());
-                System.out.println("Price: " + b.getHarga());
-                System.out.println("Stock: " + b.getStok() + "\n");
+                // Menampilkan informasi barang jika ditemukan
+                System.out.println("\nNama Barang: " + b.getNamaBarang());
+                System.out.println("Harga: " + b.getHarga());
+                System.out.println("Stok: " + b.getStok() + "\n");
                 return true;
             }
         }
-        System.out.println("\nItem's code " + kodeBarang + " is not found.\n");
+        // Jika barang tidak ditemukan
+        System.out.println("\nKode barang " + kodeBarang + " tidak ditemukan.\n");
         return false;
     }
-
 }
