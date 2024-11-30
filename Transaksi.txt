@@ -1,0 +1,5 @@
+Kode Barang: BRG031223408
+Nama Barang: New
+Jumlah: 2
+Harga: 40000
+
