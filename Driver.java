@@ -1,101 +1,93 @@
 import java.io.IOException;
 
-/**
- * Abstract class representing a generic driver in the marketplace system.
- * Contains common methods and inner interfaces for admin and customer functionalities.
- *
- * @author Kelompok 4
- * @version 1.0
- * @since 2023-12-01
- */
 abstract public class Driver {
 
-    // ANSI escape codes for coloring
+    // Kode ANSI untuk pewarnaan teks
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_GREEN = "\u001B[32m";
-    private static final String ANSI_RED = "\u001B[31m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_HIJAU = "\u001B[32m";
+    private static final String ANSI_MERAH = "\u001B[31m";
+    private static final String ANSI_KUNING = "\u001B[33m";
     private static final String ANSI_CYAN = "\u001B[36m";
 
     /**
-     * Clears the console screen.
-     * Uses platform-specific commands for clearing the console.
-     * Handles IOException and InterruptedException.
+     * Membersihkan layar konsol.
+     * Menggunakan perintah khusus sesuai platform untuk membersihkan konsol.
+     * Menangani IOException dan InterruptedException.
      */
     public static void bersihkanConsole() {
         try {
             Process process = new ProcessBuilder("cmd", "/c", "cls", "clear").inheritIO().start();
             process.waitFor();
         } catch (IOException | InterruptedException e) {
-            System.out.println(ANSI_RED + "Error clearing the console." + ANSI_RESET);
+            System.out.println(ANSI_MERAH + "Terjadi kesalahan saat membersihkan layar." + ANSI_RESET);
             e.printStackTrace();
         }
     }
 
     /**
-     * Inner interface representing admin-specific functionalities.
-     * AdminDriver interface provides methods for managing users, items, and transactions.
+     * Antarmuka dalam yang merepresentasikan fungsionalitas khusus admin.
+     * Antarmuka AdminDriver menyediakan metode untuk mengelola pengguna, barang, dan transaksi.
      */
     interface AdminDriver {
-        void deleteUser();
-        void addBarang();
-        boolean showBarang();
-        void editBarang();
-        void deleteBarang();
-        void mengaturTransaksi();
+        void hapusPengguna();
+        void tambahBarang();
+        boolean tampilkanBarang();
+        void ubahBarang();
+        void hapusBarang();
+        void aturTransaksi();
     }
 
     /**
-     * Inner interface representing customer-specific functionalities.
-     * CustomerDriver interface provides methods for managing items, cart, and transactions for customers.
+     * Antarmuka dalam yang merepresentasikan fungsionalitas khusus pelanggan.
+     * Antarmuka CustomerDriver menyediakan metode untuk mengelola barang, keranjang, dan transaksi pelanggan.
      */
     interface CustomerDriver {
-        void showBarang();
-        void masukKeranjang();
-        boolean showCart();
-        void editCart();
-        void deleteCart();
+        void tampilkanBarang();
+        void tambahKeKeranjang();
+        boolean tampilkanKeranjang();
+        void ubahKeranjang();
+        void hapusKeranjang();
         void checkoutBarang();
-        void checkInvoice();
+        void cekFaktur();
     }
 
     /**
-     * Abstract method to be implemented by subclasses.
-     * Represents the main functionality to be executed by the driver.
+     * Metode abstrak yang harus diimplementasikan oleh subclass.
+     * Merepresentasikan fungsionalitas utama yang akan dijalankan oleh driver.
      */
     public abstract void run();
 
     /**
-     * Prints a welcome message with styling.
+     * Menampilkan pesan selamat datang dengan gaya khusus.
      */
-    protected void printWelcomeMessage() {
+    protected void tampilkanPesanSelamatDatang() {
         System.out.println(ANSI_CYAN + "===============================");
-        System.out.println("    Welcome to the Marketplace  ");
+        System.out.println("  Selamat Datang di Marketplace ");
         System.out.println("===============================" + ANSI_RESET);
     }
 
     /**
-     * Prints a separator for better readability.
+     * Menampilkan pemisah untuk memperjelas tampilan.
      */
-    protected void printSeparator() {
-        System.out.println(ANSI_YELLOW + "--------------------------------" + ANSI_RESET);
+    protected void tampilkanPemisah() {
+        System.out.println(ANSI_KUNING + "--------------------------------" + ANSI_RESET);
     }
 
     /**
-     * Prints an error message.
+     * Menampilkan pesan kesalahan.
      *
-     * @param message The error message to display.
+     * @param pesan Pesan kesalahan yang akan ditampilkan.
      */
-    protected void printErrorMessage(String message) {
-        System.out.println(ANSI_RED + "Error: " + message + ANSI_RESET);
+    protected void tampilkanPesanKesalahan(String pesan) {
+        System.out.println(ANSI_MERAH + "Kesalahan: " + pesan + ANSI_RESET);
     }
 
     /**
-     * Prints a success message.
+     * Menampilkan pesan sukses.
      *
-     * @param message The success message to display.
+     * @param pesan Pesan sukses yang akan ditampilkan.
      */
-    protected void printSuccessMessage(String message) {
-        System.out.println(ANSI_GREEN + "Success: " + message + ANSI_RESET);
+    protected void tampilkanPesanSukses(String pesan) {
+        System.out.println(ANSI_HIJAU + "Berhasil: " + pesan + ANSI_RESET);
     }
 }
