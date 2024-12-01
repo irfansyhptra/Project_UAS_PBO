@@ -30,7 +30,7 @@ public class Customer extends Akun {
      * @param username The username of the customer.
      * @param password The password of the customer.
      */
-    public void saveToTextFile(String username, String password) {
+    public void simpanKeFileTeks(String username, String password) {
         // Menentukan nama file untuk menyimpan data pengguna
         
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
@@ -83,7 +83,7 @@ public class Customer extends Akun {
      * @return A list containing customer account information.
      */
     @Override
-    public List<String> readCustomerAccounts() {
+    public List<String> bacaAkunPelanggan() {
         List<String> accounts = new ArrayList<>();
         
         
@@ -115,9 +115,9 @@ public class Customer extends Akun {
      * @return True if the provided credentials are valid, false otherwise.
      */
     @Override
-    public boolean validateSignIn(String username, String password) {
+    public boolean validasiMasuk(String username, String password) {
         
-        List<String> accounts = readCustomerAccounts();
+        List<String> accounts = bacaAkunPelanggan();
         
         for (int i = 0; i < accounts.size(); i += 2) {
             String uname = accounts.get(i);
@@ -142,8 +142,8 @@ public class Customer extends Akun {
      *         - 1: Username already exists.
      *         - 2: Sign-up successful.
      */
-    public int validateSignUp(String username, String password) {
-        List<String> accounts = readCustomerAccounts();
+    public int validasiDaftar(String username, String password) {
+        List<String> accounts = bacaAkunPelanggan();
         
         
         for (int i = 0; i < accounts.size(); i += 2) {

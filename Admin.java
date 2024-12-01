@@ -14,7 +14,7 @@ public class Admin extends Akun {
 
     @Override
 
-    public void saveToTextFile(String username, String password) {
+    public void simpanKeFileTeks(String username, String password) {
         // Pastikan direktori ada
         File file = new File(fileName);
         file.getParentFile().mkdirs(); // Buat folder jika belum ada
@@ -29,7 +29,7 @@ public class Admin extends Akun {
     }
 
     @Override
-    public List<String> readCustomerAccounts() {
+    public List<String> bacaAkunPelanggan() {
         List<String> accounts = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new File(fileName))) {
@@ -58,8 +58,8 @@ public class Admin extends Akun {
      * @return True if the provided credentials are valid, false otherwise.
      */
     @Override
-    public boolean validateSignIn(String username, String password) {
-        List<String> accounts = readCustomerAccounts();
+    public boolean validasiMasuk(String username, String password) {
+        List<String> accounts = bacaAkunPelanggan();
 
         for (int i = 0; i < accounts.size(); i += 2) {
             String uname = accounts.get(i);
@@ -81,8 +81,8 @@ public class Admin extends Akun {
      * @return Always returns 0 as Admin accounts cannot be created through sign-up.
      */
 @Override
-public int validateSignUp(String username, String password) {
-    List<String> accounts = readAdminAccounts(); // Ganti ke metode pembaca Admin
+public int validasiDaftar(String username, String password) {
+    List<String> accounts = bacaAkunAdmin(); // Ganti ke metode pembaca Admin
 
     for (int i = 0; i < accounts.size(); i += 2) {
         String uname = accounts.get(i);
@@ -95,7 +95,7 @@ public int validateSignUp(String username, String password) {
 }
 
 // Tambahkan metode untuk membaca akun Admin
-public List<String> readAdminAccounts() {
+public List<String> bacaAkunAdmin() {
     List<String> accounts = new ArrayList<>();
     try (Scanner scanner = new Scanner(new File(fileName))) {
         while (scanner.hasNextLine()) {

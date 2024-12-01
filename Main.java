@@ -18,7 +18,6 @@ public class Main {
         }
     }
 
-
     public void pilihRole() {
         System.out.println("\n" + "=".repeat(30) + " PILIH ROLE " + "=".repeat(30) + "\n");
         while (true) {
@@ -64,13 +63,13 @@ public class Main {
                 password = input.next();
 
                 if (isAdmin) {
-                    if (!akunAdmin.validateSignIn(username, password)) {
+                    if (!akunAdmin.validasiMasuk(username, password)) {
                         System.out.println("\n=> Username atau password tidak valid.\n");
                     } else {
                         break;
                     }
                 } else {
-                    if (!akunCustomer.validateSignIn(username, password)) {
+                    if (!akunCustomer.validasiMasuk(username, password)) {
                         System.out.println("\n=> Username atau password tidak valid.\n");
                     } else {
                         break;
@@ -112,22 +111,22 @@ public class Main {
             password = input.next();
 
             if (isAdmin) {
-                int result = akunAdmin.validateSignUp(username, password);
+                int result = akunAdmin.validasiDaftar(username, password);
                 if (result == 0) {
                     System.out.println("\n=> Username sudah digunakan oleh Admin. Silakan pilih username lain.\n");
                 } else if (result == 1) {
-                    akunAdmin.saveToTextFile(username, password);
+                    akunAdmin.simpanKeFileTeks(username, password);
                     System.out.println("\n=> Akun Admin berhasil dibuat.\n");
                     break;
                 }
             } else {
-                int result = akunCustomer.validateSignUp(username, password);
+                int result = akunCustomer.validasiDaftar(username, password);
                 if (result == 0) {
                     System.out.println("\n=> Anda sudah memiliki akun sebelumnya.\n");
                 } else if (result == 1) {
                     System.out.println("\n=> Username sudah digunakan oleh Customer. Silakan pilih username lain.\n");
                 } else if (result == 2) {
-                    akunCustomer.saveToTextFile(username, password);
+                    akunCustomer.simpanKeFileTeks(username, password);
                     System.out.println("\n=> Akun Customer berhasil dibuat.\n");
                     break;
                 }
@@ -181,6 +180,9 @@ public class Main {
      * Initiates the program by displaying the role selection menu.
      */
     public void run() {
+        Loading loading = new Loading();
+        loading.printProgress("                          WELCOME TO KIBO MART", 70, 10);
+        System.out.println();
         pilihRole();
     }
 

@@ -1,8 +1,0 @@
-id: 1
-Username: kiting
-Password: gudangkopi
-
-id: 2
-Username: admin
-Password: admin
-
