@@ -7,12 +7,11 @@ public class Main {
     public Akun akunCustomer = new Customer();
     public Driver driverAkun;
     Scanner input = new Scanner(System.in);
-    private boolean isAdmin = false; // Menentukan apakah pengguna adalah Admin atau Customer
+    private boolean isAdmin = false;
 
     public static void bersihkanConsole() {
         try {
-            Process process = new ProcessBuilder("cmd", "/c", "cls", "clear").inheritIO().start();
-            process.waitFor();
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -42,19 +41,14 @@ public class Main {
             }
         }
         bersihkanConsole();
-        authMenu(); // Menu autentikasi setelah memilih role
+        authMenu();
     }
 
-    /**
-     * Handles the sign-in process for Admin or Customer based on the selected role.
-     */
     public void sign_in() {
         String username;
         String password;
 
         System.out.println("\n" + "=".repeat(30) + " SIGN-IN " + "=".repeat(30));
-        System.out.println("\nSilakan login ke akun Anda\n");
-
         while (true) {
             try {
                 System.out.print("Username: ");
@@ -76,7 +70,7 @@ public class Main {
                     }
                 }
             } catch (InputMismatchException e) {
-                System.out.println("=> Input tidak valid, silakan masukkan karakter yang benar.");
+                System.out.println("\n=> Input tidak valid, silakan coba lagi.");
                 input.nextLine();
             }
         }
@@ -93,59 +87,48 @@ public class Main {
         driverAkun.run();
     }
 
-    /**
-     * Handles the sign-up process for creating a new Admin or Customer account.
-     */
-   public void sign_up() {
-    String username;
-    String password;
+    public void sign_up() {
+        String username;
+        String password;
 
-    System.out.println("\n" + "=".repeat(30) + " SIGN-UP " + "=".repeat(30));
-    System.out.println("\nSilakan masukkan data untuk mendaftar\n");
+        System.out.println("\n" + "=".repeat(30) + " SIGN-UP " + "=".repeat(30));
+        while (true) {
+            try {
+                System.out.print("Username: ");
+                username = input.next();
+                System.out.print("Password: ");
+                password = input.next();
 
-    while (true) {
-        try {
-            System.out.print("Username: ");
-            username = input.next();
-            System.out.print("Password: ");
-            password = input.next();
-
-            if (isAdmin) {
-                int result = akunAdmin.validasiDaftar(username, password);
-                if (result == 0) {
-                    System.out.println("\n=> Username sudah digunakan oleh Admin. Silakan pilih username lain.\n");
-                } else if (result == 1) {
-                    akunAdmin.simpanKeFileTeks(username, password);
-                    System.out.println("\n=> Akun Admin berhasil dibuat.\n");
-                    break;
+                if (isAdmin) {
+                    int result = akunAdmin.validasiDaftar(username, password);
+                    if (result == 0) {
+                        System.out.println("\n=> Akun Admin sudah ada.\n");
+                    } else if (result == 1) {
+                        akunAdmin.simpanKeFileTeks(username, password);
+                        System.out.println("\n=> Akun Admin berhasil dibuat.\n");
+                        break;
+                    }
+                } else {
+                    int result = akunCustomer.validasiDaftar(username, password);
+                    if (result == 0) {
+                        System.out.println("\n=> Akun sudah ada.\n");
+                    } else if (result == 1) {
+                        System.out.println("\n=> Username sudah digunakan. Silakan pilih username lain.\n");
+                    } else if (result == 2) {
+                        akunCustomer.simpanKeFileTeks(username, password);
+                        System.out.println("\n=> Akun Customer berhasil dibuat.\n");
+                        break;
+                    }
                 }
-            } else {
-                int result = akunCustomer.validasiDaftar(username, password);
-                if (result == 0) {
-                    System.out.println("\n=> Anda sudah memiliki akun sebelumnya.\n");
-                } else if (result == 1) {
-                    System.out.println("\n=> Username sudah digunakan oleh Customer. Silakan pilih username lain.\n");
-                } else if (result == 2) {
-                    akunCustomer.simpanKeFileTeks(username, password);
-                    System.out.println("\n=> Akun Customer berhasil dibuat.\n");
-                    break;
-                }
+            } catch (InputMismatchException e) {
+                System.out.println("\n=> Input tidak valid, silakan coba lagi.");
+                input.nextLine();
             }
-        } catch (InputMismatchException e) {
-            System.out.println("=> Input tidak valid, silakan masukkan karakter yang benar.");
-            input.nextLine();
         }
+        bersihkanConsole();
+        authMenu();
     }
 
-    bersihkanConsole();
-    authMenu();
-}
-
-
-
-    /**
-     * Displays the authentication menu, allowing users to sign in, sign up, or exit.
-     */
     public void authMenu() {
         int inputAuth;
         System.out.println("\n" + "=".repeat(30) + " AUTENTIKASI " + "=".repeat(30) + "\n");
@@ -176,21 +159,10 @@ public class Main {
         }
     }
 
-    /**
-     * Initiates the program by displaying the role selection menu.
-     */
     public void run() {
-        Loading loading = new Loading();
-        loading.printProgress("                          WELCOME TO KIBO MART", 70, 10);
-        System.out.println();
         pilihRole();
     }
 
-    /**
-     * The main method to start the program.
-     *
-     * @param args Command-line arguments (not used in this program).
-     */
     public static void main(String[] args) {
         Main program = new Main();
         program.run();

@@ -7,165 +7,163 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Customer extends Akun {
     public Keranjang keranjang;
     public ArrayList<Invoice> invoiceSelesai;
-    private String fileName = "Customer/Credentials/AkunCustomer.txt";
+    private final String namaFile = "Customer/Credentials/AkunCustomer.txt";
     private int id_Customer = 0;
     private String username;
 
     /**
-     * Sets the username for the current customer instance.
+     * Mengatur username untuk instance customer saat ini.
      *
-     * @param username The username of the customer.
+     * @param username Username dari customer.
      */
     public void setUsername(String username) {
         this.username = username;
     }
 
     /**
-     * Saves customer account information to a text file and creates necessary folders and files.
+     * Menyimpan informasi akun customer ke file teks dan membuat folder serta file yang diperlukan.
      *
-     * @param username The username of the customer.
-     * @param password The password of the customer.
+     * @param username Username dari customer.
+     * @param password Password dari customer.
      */
     public void simpanKeFileTeks(String username, String password) {
-        // Menentukan nama file untuk menyimpan data pengguna
-        
-        try (PrintWriter writer = new PrintWriter(new FileWriter(fileName, true))) {
-            int id = id_Customer += 1;
-            
-            writer.println("id: " + id);
+        // Pastikan ID selalu bertambah
+        id_Customer = bacaIDTerakhir() + 1;
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(namaFile, true))) {
+            writer.println("id: " + id_Customer);
             writer.println("Username: " + username);
             writer.println("Password: " + password);
-            writer.println(); // Tambahkan baris kosong antara setiap entri pengguna
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        
-        String folderName = "Cus" + username;
+            writer.println(); // Tambahkan baris kosong antar akun
 
-        File directory = null;
-        File keranjangFile = null;
-        File invoiceFile = null;
-        File transaksiFile = null;
+        } catch (IOException e) {
+            System.out.println("Terjadi kesalahan saat menyimpan akun: " + e.getMessage());
+        }
+
+        buatFolderCustomer(username);
+    }
+
+    /**
+     * Membuat folder dan file default untuk customer.
+     *
+     * @param username Username dari customer.
+     */
+    private void buatFolderCustomer(String username) {
+        String namaFolder = "Cus" + username;
+        File directory = new File("Customer", namaFolder);
+
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
 
         try {
-            // Create the Customer folder if it doesn't exist
-            directory = new File("Customer", folderName);
-            directory.mkdirs();
-                
-            // Create Keranjang.txt file
-            keranjangFile = new File(directory, "Keranjang.txt");
-            keranjangFile.createNewFile();
-                
-            // Create Invoice.txt file
-            invoiceFile = new File(directory, "Invoice.txt");
-            invoiceFile.createNewFile();
-                
-            // Create Transaksi.txt file
-            transaksiFile = new File(directory, "Transaksi.txt");
-            transaksiFile.createNewFile();
-                
+            new File(directory, "Keranjang.txt").createNewFile();
+            new File(directory, "Invoice.txt").createNewFile();
+            new File(directory, "Transaksi.txt").createNewFile();
         } catch (IOException e) {
-            System.out.println("Terjadi kesalahan saat mencoba membuat file.");
-            e.printStackTrace();
+            System.out.println("Terjadi kesalahan saat membuat file untuk customer: " + e.getMessage());
         }
-        
     }
-    
-    
+
     /**
-     * Reads customer accounts from the text file.
+     * Membaca ID terakhir dari file akun customer untuk memastikan ID tetap unik.
      *
-     * @return A list containing customer account information.
+     * @return ID terakhir di file akun customer.
+     */
+    private int bacaIDTerakhir() {
+        int lastID = 0;
+        try (Scanner scanner = new Scanner(new File(namaFile))) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                if (line.startsWith("id:")) {
+                    lastID = Integer.parseInt(line.split(":")[1].trim());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File akun customer tidak ditemukan. ID akan dimulai dari 0.");
+        }
+        return lastID;
+    }
+
+    /**
+     * Membaca semua akun customer dari file teks.
+     *
+     * @return Daftar berisi data akun customer.
      */
     @Override
     public List<String> bacaAkunPelanggan() {
-        List<String> accounts = new ArrayList<>();
-        
-        
-        try (Scanner scanner = new Scanner(new File(fileName))) {
+        List<String> akun = new ArrayList<>();
+        try (Scanner scanner = new Scanner(new File(namaFile))) {
             while (scanner.hasNextLine()) {
-                String id = scanner.nextLine().split(":")[1].trim();
-                String username = scanner.nextLine().split(":")[1].trim();
-                String password = scanner.nextLine().split(":")[1].trim();
-                
-                id_Customer = Integer.parseInt(id);
-                accounts.add(username);
-                accounts.add(password);
-                
-                scanner.nextLine();
+                try {
+                    String id = scanner.nextLine().split(":")[1].trim();
+                    String username = scanner.nextLine().split(":")[1].trim();
+                    String password = scanner.nextLine().split(":")[1].trim();
+                    scanner.nextLine(); // Lewati baris kosong
+
+                    id_Customer = Integer.parseInt(id);
+                    akun.add(username);
+                    akun.add(password);
+                } catch (Exception e) {
+                    System.out.println("Kesalahan saat membaca data akun: Format file tidak sesuai.");
+                    break;
+                }
             }
-            
         } catch (FileNotFoundException e) {
-            System.out.println("File tidak ditemukan");;
+            System.out.println("File akun customer tidak ditemukan. Pastikan file sudah dibuat.");
         }
-        
-        return accounts;
+        return akun;
     }
-    
+
     /**
-     * Validates customer sign-in credentials.
+     * Memvalidasi login customer berdasarkan username dan password.
      *
-     * @param username The entered username for sign-in.
-     * @param password The entered password for sign-in.
-     * @return True if the provided credentials are valid, false otherwise.
+     * @param username Username yang diinput.
+     * @param password Password yang diinput.
+     * @return True jika valid, false jika tidak.
      */
     @Override
     public boolean validasiMasuk(String username, String password) {
-        
-        List<String> accounts = bacaAkunPelanggan();
-        
-        for (int i = 0; i < accounts.size(); i += 2) {
-            String uname = accounts.get(i);
-            String pword = accounts.get(i + 1);
-            
-            if (username.equals(uname) && password.equals(pword)) {
+        List<String> akun = bacaAkunPelanggan();
+        for (int i = 0; i < akun.size(); i += 2) {
+            if (username.equals(akun.get(i)) && password.equals(akun.get(i + 1))) {
                 this.setUsername(username);
                 return true;
             }
         }
         return false;
-        
     }
-    
+
     /**
-     * Validates customer sign-up credentials.
+     * Memvalidasi pendaftaran akun customer baru.
      *
-     * @param username The entered username for sign-up.
-     * @param password The entered password for sign-up.
-     * @return An integer code indicating the result of the validation:
-     *         - 0: Account already exists.
-     *         - 1: Username already exists.
-     *         - 2: Sign-up successful.
+     * @param username Username yang diinput.
+     * @param password Password yang diinput.
+     * @return Kode hasil validasi:
+     *         - 0: Akun sudah ada.
+     *         - 1: Username sudah digunakan.
+     *         - 2: Pendaftaran berhasil.
      */
     public int validasiDaftar(String username, String password) {
-        List<String> accounts = bacaAkunPelanggan();
-        
-        
-        for (int i = 0; i < accounts.size(); i += 2) {
-            String uname = accounts.get(i);
-            String pword = accounts.get(i + 1);
-            
-            if (username.equals(uname) && password.equals(pword)) {
-                System.out.println("\n=> You already have an account earlier\n");
-                return 0;
-            }
-            if (username.equals(uname)) {
-                return 1;
+        List<String> akun = bacaAkunPelanggan();
+        for (int i = 0; i < akun.size(); i += 2) {
+            if (username.equals(akun.get(i))) {
+                if (password.equals(akun.get(i + 1))) {
+                    return 0; // Akun sudah ada
+                }
+                return 1; // Username sudah digunakan
             }
         }
-        return 2;
-        
+        return 2; // Akun baru
     }
-    
-    /** 
-     * Gets the username of the current customer instance.
+
+    /**
+     * Mendapatkan username dari instance customer saat ini.
      *
-     * @return The username of the customer.
+     * @return Username dari customer.
      */
     public String getUsername() {
         return this.username;

@@ -11,7 +11,7 @@ Stok: 5
 Kode Barang: BRG301123308
 Nama Barang: Puma
 Harga: 20000
-Stok: 10
+Stok: 8
 
 Kode Barang: BRG031223202
 Nama Barang: Reebok
@@ -19,7 +19,7 @@ Harga: 40000
 Stok: 20
 
 Kode Barang: BRG031223408
-Nama Barang: NewBalance
+Nama Barang: New Balance
 Harga: 20000
-Stok: 3
+Stok: 1
 

@@ -6,7 +6,7 @@
  * Kelas ini merepresentasikan barang dengan atribut kode, nama, harga, dan stok.
  */
 public class Barang {
-    private String kodeBarang;
+    private final String kodeBarang;
     private String namaBarang;
     private int harga;
     private int stok;
